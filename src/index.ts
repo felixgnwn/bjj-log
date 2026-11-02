@@ -1,5 +1,6 @@
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
+import { appendFile } from "node:fs/promises";
 
 type Result = "yes" | "no" | "partly";
 
@@ -13,6 +14,20 @@ type Session = {
 
 function isResult(value: string): value is Result {
   return value === "yes" || value === "no" || value === "partly";
+}
+
+async function appendData(filePath: string, data: Session) {
+  const row =
+    Object.values(data)
+      .map((val) => `"${String(val).replace(/"/g, '""')}"`)
+      .join(",") + "\n";
+
+  try {
+    await appendFile(filePath, row, "utf8");
+    console.log("Row Added");
+  } catch (err) {
+    console.error("Error appending row:", err);
+  }
 }
 
 async function main() {
@@ -46,7 +61,7 @@ async function main() {
     why,
   };
 
-  console.log(session);
+  appendData("./src/data/logs.csv", session);
 
   rl.close();
 }
