@@ -1,5 +1,5 @@
-import type { PositionSummary } from "./summary.js";
-import { COLUMNS, type Session } from "./types.js";
+import type { PositionSummary } from "../core/summary.js";
+import { COLUMNS, type Session } from "../core/types.js";
 
 const MAX_CELL_WIDTH = 30;
 

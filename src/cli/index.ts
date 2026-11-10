@@ -2,8 +2,8 @@ import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import { showSessions, showSummary } from "./display.js";
 import { askSession } from "./prompts.js";
-import { appendSession, loadSessions } from "./storage.js";
-import { summarize } from "./summary.js";
+import { appendSession, loadSessions } from "../storage/storage.js";
+import { summarize } from "../core/summary.js";
 
 const MENU = `
 1. Log your training session

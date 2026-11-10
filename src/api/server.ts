@@ -1,6 +1,6 @@
 import express from "express";
-import { appendSession, loadSessions } from "./storage.js";
-import { summarize } from "./summary.js";
+import { appendSession, loadSessions } from "../storage/storage.js";
+import { summarize } from "../core/summary.js";
 import { validateSession } from "./validation.js";
 
 const app = express();

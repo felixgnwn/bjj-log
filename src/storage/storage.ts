@@ -1,9 +1,9 @@
 import { appendFile, mkdir, readFile, stat } from "node:fs/promises";
 import { dirname } from "node:path";
-import { parseCsv, toCsvField } from "./csv.js";
-import { COLUMNS, isResult, type Session } from "./types.js";
+import { parseCsv, toCsvField } from "../cli/csv.js";
+import { COLUMNS, isResult, type Session } from "../core/types.js";
 
-const FILE_PATH = "./src/data/logs.csv";
+const FILE_PATH = "./data/logs.csv";
 
 // True if the file is missing or empty -> we need a header
 async function needsHeader(): Promise<boolean> {

@@ -1,4 +1,4 @@
-import { isResult, type Session } from "./types.js";
+import { isResult, type Session } from "../core/types.js";
 
 type ValidationResult =
   | { ok: true; session: Session }

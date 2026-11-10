@@ -1,5 +1,5 @@
 import type readline from "node:readline/promises";
-import { isResult, type Result, type Session } from "./types.js";
+import { isResult, type Result, type Session } from "../core/types.js";
 
 function today(): string {
   return new Date().toLocaleDateString("en-GB", {
