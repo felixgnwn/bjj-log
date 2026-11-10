@@ -203,8 +203,27 @@ function showSummary(sessions: Session[]) {
   }
 }
 
+function today(): string {
+  return new Date().toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+// Shows the question with a prefilled answer the user can edit or delete
+async function askWithDefault(
+  rl: readline.Interface,
+  question: string,
+  defaultValue: string,
+): Promise<string> {
+  const answer = rl.question(question);
+  rl.write(defaultValue);
+  return (await answer).trim() || defaultValue;
+}
+
 async function addEntry(rl: readline.Interface) {
-  const date = await rl.question("\nWhats the date?: ");
+  const date = await askWithDefault(rl, "\nWhats the date?: ", today());
   const position = await rl.question("Whats the position?: ");
   const whatYouTried = await rl.question("What did you try?: ");
 
