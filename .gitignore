@@ -1,5 +1,4 @@
 node_modules
 src/data/
 
-test-bad.json
-test-good.json
+examples/
