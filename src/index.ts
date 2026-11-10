@@ -1,6 +1,9 @@
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import { appendFile } from "node:fs/promises";
+import { appendFile, mkdir, stat } from "node:fs/promises";
+import { dirname } from "node:path";
+
+const FILE_PATH = "./src/data/logs.csv";
 
 type Result = "yes" | "no" | "partly";
 
@@ -12,18 +15,44 @@ type Session = {
   why: string;
 };
 
+const COLUMNS: (keyof Session)[] = [
+  "date",
+  "position",
+  "whatYouTried",
+  "result",
+  "why",
+];
+
 function isResult(value: string): value is Result {
   return value === "yes" || value === "no" || value === "partly";
 }
 
-async function appendData(filePath: string, data: Session) {
-  const row =
-    Object.values(data)
-      .map((val) => `"${String(val).replace(/"/g, '""')}"`)
-      .join(",") + "\n";
+function toCsvField(value: string): string {
+  return `"${value.replace(/"/g, '""')}"`;
+}
 
+async function needsHeader(filePath: string): Promise<boolean> {
   try {
-    await appendFile(filePath, row, "utf8");
+    const info = await stat(filePath);
+    return info.size === 0;
+  } catch {
+    return true;
+  }
+}
+
+async function appendData(filePath: string, data: Session) {
+  try {
+    await mkdir(dirname(filePath), { recursive: true });
+
+    const lines: string[] = [];
+
+    if (await needsHeader(filePath)) {
+      lines.push(COLUMNS.map(toCsvField).join(","));
+    }
+
+    lines.push(COLUMNS.map((col) => toCsvField(data[col])).join(","));
+
+    await appendFile(filePath, lines.join("\n") + "\n", "utf8");
     console.log("Row Added");
   } catch (err) {
     console.error("Error appending row:", err);
@@ -61,7 +90,7 @@ async function main() {
     why,
   };
 
-  appendData("./src/data/logs.csv", session);
+  await appendData(FILE_PATH, session);
 
   rl.close();
 }
