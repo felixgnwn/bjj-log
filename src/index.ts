@@ -59,10 +59,8 @@ async function appendData(filePath: string, data: Session) {
   }
 }
 
-async function main() {
-  const rl = readline.createInterface({ input, output });
-
-  const date = await rl.question("Whats the date?: ");
+async function addEntry(rl: readline.Interface) {
+  const date = await rl.question("\nWhats the date?: ");
   const position = await rl.question("Whats the position?: ");
   const whatYouTried = await rl.question("What did you try?: ");
 
@@ -82,17 +80,38 @@ async function main() {
 
   const why = await rl.question("Why do you think that?: ");
 
-  const session: Session = {
-    date,
-    position,
-    whatYouTried,
-    result,
-    why,
-  };
+  const session: Session = { date, position, whatYouTried, result, why };
 
   await appendData(FILE_PATH, session);
+}
+
+async function main() {
+  const rl = readline.createInterface({ input, output });
+
+  let running = true;
+
+  while (running) {
+    console.log("\n1. Log your training session");
+    console.log("2. See all your sessions");
+    console.log("3. Summary");
+    console.log("0. Exit\n");
+
+    const option = (await rl.question("Choose an option: ")).trim();
+
+    if (option === "1") {
+      await addEntry(rl);
+    } else if (option === "2") {
+      console.log("\nNot built yet (step 5).");
+    } else if (option === "3") {
+      console.log("\nNot built yet (step 6).");
+    } else if (option === "0") {
+      running = false;
+    } else {
+      console.log("\nPlease choose 1, 2, 3, or 0.");
+    }
+  }
 
   rl.close();
 }
 
-main();
+main().catch(console.error);
