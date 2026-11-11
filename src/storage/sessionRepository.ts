@@ -78,4 +78,33 @@ export class SessionRepository implements SessionStore {
 
     return rows;
   }
+
+  async update(id: number, session: Session): Promise<StoredSession | null> {
+    const { rows } = await this.pool.query<SessionRow>(
+      `UPDATE sessions
+       SET date = $1, position = $2, what_you_tried = $3, result = $4, why = $5
+       WHERE id = $6
+       RETURNING ${SESSION_COLUMNS}`,
+      [
+        session.date,
+        session.position,
+        session.whatYouTried,
+        session.result,
+        session.why,
+        id,
+      ],
+    );
+
+    const row = rows[0];
+    return row ? toStoredSession(row) : null;
+  }
+
+  async remove(id: number): Promise<boolean> {
+    const result = await this.pool.query("DELETE FROM sessions WHERE id = $1", [
+      id,
+    ]);
+
+    // rowCount is how many rows the DELETE removed
+    return (result.rowCount ?? 0) > 0;
+  }
 }

@@ -66,6 +66,32 @@ Example of a rejected request:
 curl.exe -i -X POST http://localhost:3000/sessions -H "Content-Type: application/json" -d "@examples/bad-session.json"
 ```
 
+### `PUT /sessions/:id`
+
+Replaces every field of one session. The body is the same as `POST`.
+
+```
+curl.exe -i -X PUT http://localhost:3000/sessions/1 -H "Content-Type: application/json" -d "@examples/update-session.json"
+```
+
+| Status | Meaning                                    |
+| ------ | ------------------------------------------ |
+| `200`  | Updated. The saved session is in the body. |
+| `400`  | Invalid id or invalid body.                |
+| `404`  | No session with that id.                   |
+
+### `DELETE /sessions/:id`
+
+```
+curl.exe -i -X DELETE http://localhost:3000/sessions/1
+```
+
+| Status | Meaning                  |
+| ------ | ------------------------ |
+| `204`  | Deleted. No body.        |
+| `400`  | Invalid id.              |
+| `404`  | No session with that id. |
+
 ## Notes
 
 - On PowerShell, use `curl.exe` instead of `curl`, which is an alias for something else.

@@ -49,3 +49,15 @@ export function validateSession(body: unknown): ValidationResult {
 
   return { ok: true, session: { date, position, whatYouTried, result, why } };
 }
+
+// Postgres SERIAL is a 32-bit integer, so anything bigger can't exist
+const MAX_ID = 2_147_483_647;
+
+// Turns the ":id" part of a URL into a number, or null if it isn't a valid id
+export function parseId(raw: string | undefined): number | null {
+  if (raw === undefined || !/^\d+$/.test(raw)) return null;
+
+  const id = Number(raw);
+
+  return id >= 1 && id <= MAX_ID ? id : null;
+}
