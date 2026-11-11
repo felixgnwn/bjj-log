@@ -10,6 +10,9 @@ export type Session = {
   why: string;
 };
 
+// A session after it's saved: the database gives it an id
+export type StoredSession = Session & { id: number };
+
 // Column order lives in one place
 export const COLUMNS: (keyof Session)[] = [
   "date",
