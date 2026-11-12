@@ -1,4 +1,4 @@
-const RESULTS = ["yes", "no", "partly"] as const;
+export const RESULTS = ["yes", "no", "partly"] as const;
 
 export type Result = (typeof RESULTS)[number];
 
