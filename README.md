@@ -1,5 +1,7 @@
 # BJJ Training Log
 
+![CI](https://github.com/felixgnwn/bjj-log/actions/workflows/ci.yml/badge.svg)
+
 A small TypeScript/Node project for logging BJJ training sessions and seeing
 how well each position works for me. It has a CLI and an HTTP API that share
 the same Postgres-backed storage.
