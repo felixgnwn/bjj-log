@@ -36,6 +36,18 @@ Set in `.env` (see `.env.example`). Invalid or missing values stop the app at st
 Every API response includes an `x-request-id` header, and the same id appears in
 the logs for that request. Send your own `x-request-id` to trace a request.
 
+## Tests
+
+```
+npm run db:up
+npm run db:test:create   # once: creates the bjj_log_test database
+npm test
+```
+
+Unit and API tests use an in-memory store and need no database. The repository
+tests need Postgres and `TEST_DATABASE_URL` in `.env`; they are skipped without it.
+They refuse to run unless the database name ends in `_test`.
+
 ## API
 
 ### `GET /sessions`
