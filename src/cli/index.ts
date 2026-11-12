@@ -1,6 +1,6 @@
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import type { SessionStore } from "../core/sessionStore.js";
+import { SessionService } from "../core/sessionService.js";
 import { pool } from "../db/pool.js";
 import { SessionRepository } from "../storage/sessionRepository.js";
 import { showSessions, showSummary } from "./display.js";
@@ -15,12 +15,12 @@ const MENU = `
 
 async function addEntry(
   rl: readline.Interface,
-  store: SessionStore,
+  service: SessionService,
 ): Promise<void> {
   const session = await askSession(rl);
 
   try {
-    const saved = await store.add(session);
+    const saved = await service.add(session);
     console.log(`Saved as #${saved.id}`);
   } catch (err) {
     console.error("Error saving session:", err);
@@ -33,7 +33,7 @@ async function pause(rl: readline.Interface): Promise<void> {
 
 async function main(): Promise<void> {
   const rl = readline.createInterface({ input, output });
-  const store: SessionStore = new SessionRepository(pool);
+  const service = new SessionService(new SessionRepository(pool));
 
   try {
     let running = true;
@@ -44,14 +44,14 @@ async function main(): Promise<void> {
 
       switch (option) {
         case "1":
-          await addEntry(rl, store);
+          await addEntry(rl, service);
           break;
         case "2":
-          showSessions(await store.list());
+          showSessions(await service.list());
           await pause(rl);
           break;
         case "3":
-          showSummary(await store.summary());
+          showSummary(await service.summary());
           await pause(rl);
           break;
         case "0":
