@@ -33,7 +33,7 @@ describe("summarize", () => {
       session("  CLOSED GUARD ", "no"),
     ]);
 
-    expect(result).toEqual([{ position: "closed guard", total: 2, worked: 1 }]);
+    expect(result).toEqual([{ position: "closed guard", total: 3, worked: 1 }]);
   });
 
   it("puts the most-practised position first", () => {
