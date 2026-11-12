@@ -22,6 +22,20 @@ npm run db:migrate       # creates the sessions table
 | `npm run check`             | Type-check without running                             |
 | `npm run db:up` / `db:down` | Start / stop the local Postgres container              |
 
+## Configuration
+
+Set in `.env` (see `.env.example`). Invalid or missing values stop the app at startup.
+
+| Variable       | Default         | Meaning                                                         |
+| -------------- | --------------- | --------------------------------------------------------------- |
+| `DATABASE_URL` | none (required) | Postgres connection string                                      |
+| `PORT`         | `3000`          | API port                                                        |
+| `NODE_ENV`     | `development`   | `development` gives readable logs, anything else gives JSON     |
+| `LOG_LEVEL`    | `info`          | `fatal`, `error`, `warn`, `info`, `debug`, `trace`, or `silent` |
+
+Every API response includes an `x-request-id` header, and the same id appears in
+the logs for that request. Send your own `x-request-id` to trace a request.
+
 ## API
 
 ### `GET /sessions`

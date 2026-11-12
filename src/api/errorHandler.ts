@@ -18,7 +18,7 @@ function clientErrorStatus(err: unknown): number | null {
 // so _next must stay even though it's unused
 export function errorHandler(
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   _next: NextFunction,
 ): void {
@@ -34,6 +34,7 @@ export function errorHandler(
     return;
   }
 
-  console.error("Unhandled error:", err);
+  // req.log already carries this request's id, so the line can be traced
+  req.log.error({ err }, "Unhandled error");
   res.status(500).json({ error: "Internal server error" });
 }
