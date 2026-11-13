@@ -8,7 +8,42 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bjj -d bjj_log"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Production-style services. Only started with: docker compose --profile app up
+  # (inside this network the database host is "db", not "localhost")
+  migrate:
+    profiles: ["app"]
+    build: .
+    image: bjj-log-api:local
+    command: ["node", "dist/db/migrate.js"]
+    environment:
+      DATABASE_URL: postgres://bjj:bjj_dev_password@db:5432/bjj_log
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    profiles: ["app"]
+    build: .
+    image: bjj-log-api:local
+    init: true
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://bjj:bjj_dev_password@db:5432/bjj_log
+      NODE_ENV: production
+      PORT: "3000"
+      LOG_LEVEL: info
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
 
 volumes:
   pgdata:

@@ -12,7 +12,11 @@
     "db:migrate": "tsx src/db/migrate.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:test:create": "docker compose exec db psql -U bjj -d bjj_log -c \"CREATE DATABASE bjj_log_test;\""
+    "db:test:create": "docker compose exec db psql -U bjj -d bjj_log -c \"CREATE DATABASE bjj_log_test;\"",
+    "build": "tsc -p tsconfig.build.json",
+    "start:prod": "node dist/api/server.js",
+    "app:up": "docker compose --profile app up --build",
+    "app:down": "docker compose --profile app down"
   },
   "keywords": [],
   "author": "",

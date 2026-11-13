@@ -25,6 +25,8 @@ export function createApp(service: SessionService, logger: Logger): Express {
         res.setHeader("x-request-id", id);
         return id;
       },
+      // Hosts poll /health every few seconds; keep it out of the logs
+      autoLogging: { ignore: (req) => req.url === "/health" },
       customLogLevel: (_req, res, err) => {
         if (err || res.statusCode >= 500) return "error";
         if (res.statusCode >= 400) return "warn";
@@ -32,6 +34,11 @@ export function createApp(service: SessionService, logger: Logger): Express {
       },
     }),
   );
+
+  // Liveness only: "the process is up". It deliberately doesn't touch the database.
+  app.get("/health", (_req, res) => {
+    res.json({ status: "ok" });
+  });
 
   app.use(express.json());
   app.use(createSessionController(service));

@@ -53,5 +53,11 @@ jobs:
       - name: Type check
         run: npm run check
 
+      - name: Build
+        run: npm run build
+
+      - name: Build Docker image
+        run: docker build -t bjj-log-api .
+
       - name: Test
         run: npm test

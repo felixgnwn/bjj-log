@@ -50,6 +50,17 @@ Unit and API tests use an in-memory store and need no database. The repository
 tests need Postgres and `TEST_DATABASE_URL` in `.env`; they are skipped without it.
 They refuse to run unless the database name ends in `_test`.
 
+## Run in Docker (production-style)
+
+```
+npm run app:up      # builds the image, applies the schema, starts the API on :3000
+npm run app:down    # stops it (the database volume is kept)
+```
+
+The image is built in three stages (compile, production dependencies, runtime),
+runs as a non-root user, and has a health check at `GET /health`.
+Stop `npm run api` first if it is running, because both use port 3000.
+
 ## API
 
 ### `GET /sessions`

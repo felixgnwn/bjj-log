@@ -182,6 +182,15 @@ describe("API", () => {
     });
   });
 
+  describe("GET /health", () => {
+    it("reports ok without touching the store", async () => {
+      const res = await request(appWith(new FailingStore())).get("/health");
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ status: "ok" });
+    });
+  });
+
   describe("unexpected errors", () => {
     it("returns a generic 500 and doesn't leak details", async () => {
       const failingApp = appWith(new FailingStore());
